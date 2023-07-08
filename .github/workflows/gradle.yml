@@ -24,7 +24,7 @@ jobs:
     steps:
 
       - name: checkout
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       # JDK version 설정
       - name: Set up JDK 11
