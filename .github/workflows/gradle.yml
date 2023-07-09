@@ -45,3 +45,18 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_REPO }}/exercise .
           docker push ${{ secrets.DOCKER_REPO }}/exercise
+          
+
+      ## docker compose up
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.KEY }}
+          script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/exercise
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/nginx
+            docker-compose up -d
+            docker image prune -f    
