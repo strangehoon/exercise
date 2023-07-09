@@ -8,7 +8,7 @@ public class ex {
 
     @RequestMapping("/ex")
     public String ex(){
-        return "hellos!!";
+        return "hellos!!!";
     }
 
 
