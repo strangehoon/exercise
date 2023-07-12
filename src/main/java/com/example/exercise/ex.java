@@ -2,10 +2,7 @@ package com.example.exercise;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,10 +12,10 @@ public class ex {
     private final UserService userService;
 
     @PostMapping("/ex1")
-    public void ex(Dto dto){
+    public void ex(@RequestParam String content){
         log.info("111111111111111111111111111");
         User user = new User();
-        user.setContent(dto.getContent());
+        user.setContent(content);
         userService.saveUser(user);
         //return "hellos!!";
     }
