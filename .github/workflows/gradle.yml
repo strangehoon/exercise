@@ -44,7 +44,7 @@ jobs:
           
           # GitHub-Actions 에서 설정한 값을 application.yaml 파일에 쓰기
           echo "${{ secrets.DATABASE }}" >> ./application.yaml
-        shell: bash          
+        shell: bash
 
       # Build
       - name: Build with Gradle
