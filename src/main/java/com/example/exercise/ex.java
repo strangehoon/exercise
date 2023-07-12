@@ -3,7 +3,6 @@ package com.example.exercise;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,7 @@ public class ex {
     @GetMapping("/ex1")
     public String ex(){
         log.info("1");
-        User user = new User();
+        Users user = new Users();
         user.setContent("hello");
         userService.saveUser(user);
         return "hellos!!";
