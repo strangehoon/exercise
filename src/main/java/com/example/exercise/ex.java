@@ -1,6 +1,7 @@
 package com.example.exercise;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +12,7 @@ public class ex {
 
     private final UserService userService;
 
-    @PostMapping ("/ex1")
+    @GetMapping("/ex1")
     public String ex(){
         User user = new User();
         user.setContent("hello");
