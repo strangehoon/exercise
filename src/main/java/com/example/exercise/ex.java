@@ -1,6 +1,7 @@
 package com.example.exercise;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ex {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @RequestMapping("/ex")
+    @RequestMapping ("/ex1")
     public String ex(){
-        User user = new User();
-        user.setContent("hello");
-        userRepository.save(user);
+//        User user = new User();
+//        user.setContent("hello");
+//        userService.saveUser(user);
         return "hellos!!";
     }
 
