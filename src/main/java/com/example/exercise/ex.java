@@ -13,7 +13,7 @@ public class ex {
 
     @PostMapping("/ex1")
     public void ex(@RequestParam String content){
-        log.info("111111111111111111");
+        log.info("111111111111111");
         User user = new User();
         user.setContent(content);
         userService.saveUser(user);
