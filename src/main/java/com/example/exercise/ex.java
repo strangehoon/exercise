@@ -15,10 +15,10 @@ public class ex {
     private final UserService userService;
 
     @PostMapping("/ex1")
-    public void ex(){
+    public void ex(Dto dto){
         log.info("111111111111111111111111111");
         User user = new User();
-        user.setContent("hello");
+        user.setContent(dto.getContent());
         userService.saveUser(user);
         //return "hellos!!";
     }
