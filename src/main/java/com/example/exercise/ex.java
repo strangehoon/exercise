@@ -11,11 +11,11 @@ public class ex {
 
     private final UserService userService;
 
-    @RequestMapping ("/ex1")
+    @PostMapping ("/ex1")
     public String ex(){
-//        User user = new User();
-//        user.setContent("hello");
-//        userService.saveUser(user);
+        User user = new User();
+        user.setContent("hello");
+        userService.saveUser(user);
         return "hellos!!";
     }
 
