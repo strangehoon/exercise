@@ -16,7 +16,7 @@ public class ex {
     @GetMapping("/ex1")
     public String ex(){
         log.info("111111111111111111111111111");
-        Users user = new Users();
+        User user = new User();
         user.setContent("hello");
         userService.saveUser(user);
         return "hellos!!";

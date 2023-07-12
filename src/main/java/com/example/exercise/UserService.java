@@ -13,7 +13,7 @@ public class UserService {
 
 
     @Transactional
-    public void saveUser(Users user){
+    public void saveUser(User user){
         userRepository.save(user);
     }
 }
