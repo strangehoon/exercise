@@ -51,8 +51,7 @@ jobs:
       # Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build -t strangehoon2 .
-        working-directory: ./path/to/dockerfile
+          docker build -t ${{ secrets.DOCKER_REPO }}/seniors .
 
 
 
