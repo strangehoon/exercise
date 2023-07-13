@@ -1,2 +1,2 @@
-sudo docker rm -f $(docker ps -qa)
-sudo docker-compose up -d
+docker rm -f $(docker ps -qa)
+docker-compose up -d
