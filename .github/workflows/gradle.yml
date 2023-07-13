@@ -85,7 +85,6 @@ jobs:
 
       # CodeDelploy에 배포를 요청합니다.
       - name: Code Deploy 배포 요청
-          ## 애플리케이션 이름
         run: aws deploy create-deployment --application-name seniors
           --deployment-config-name CodeDeployDefault.OneAtATime
           ## 배포 그룹 이름
