@@ -54,11 +54,6 @@ jobs:
           docker build -t strangehoon2 .
         working-directory: ./path/to/dockerfile
 
-      # Docker 이미지를 압축하여 S3에 업로드
-      - name: Upload Docker image to S3
-        run: |
-          docker save strangehoon2 | gzip > strangehoon2.tar.gz
-          aws s3 cp strangehoon2.tar.gz s3://backend-app-bucket/strangehoon2.tar.gz
 
 
       ## Slack 알람(빌드)
@@ -82,12 +77,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # S3에 프로젝트를 업로드 합니다.
-      - name: S3에 프로젝트 업로드
+      # Docker 이미지를 압축하여 S3에 업로드
+      - name: Upload Docker image to S3
         run: |
-          aws s3 cp \
-          --region ap-northeast-2 \
-          ./spring-build.zip s3://backend-app-bucket
+          docker save strangehoon2 | gzip > strangehoon2.tar.gz
+          aws s3 cp strangehoon2.tar.gz s3://backend-app-bucket/strangehoon2.tar.gz
 
       # CodeDelploy에 배포를 요청합니다.
       - name: Code Deploy 배포 요청
