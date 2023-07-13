@@ -9,9 +9,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
 
 permissions:
   contents: read
@@ -50,12 +48,18 @@ jobs:
         with:
           arguments: build
 
-      ## 웹 이미지 빌드 및 도커허브에 push
-      - name: web docker build and push
+      # Docker 이미지 빌드
+      - name: Build Docker image
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO }}/exercise .
-          docker push ${{ secrets.DOCKER_REPO }}/exercise
+          docker build -t strangehoon2 .
+        working-directory: ./path/to/dockerfile
+
+      # Docker 이미지를 압축하여 S3에 업로드
+      - name: Upload Docker image to S3
+        run: |
+          docker save strangehoon2 | gzip > strangehoon2.tar.gz
+          aws s3 cp strangehoon2.tar.gz s3://backend-app-bucket/strangehoon2.tar.gz
+
 
       ## Slack 알람(빌드)
       - name: Slack 알람 발송
@@ -69,7 +73,43 @@ jobs:
           SLACK_USERNAME: Notification-Bot
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
         if: always()
-          
+
+      # AWS에 연결해줍니다.
+      - name: AWS 연결
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # S3에 프로젝트를 업로드 합니다.
+      - name: S3에 프로젝트 업로드
+        run: |
+          aws s3 cp \
+          --region ap-northeast-2 \
+          ./spring-build.zip s3://backend-app-bucket
+
+      # CodeDelploy에 배포를 요청합니다.
+      - name: Code Deploy 배포 요청
+          ## 애플리케이션 이름
+        run: aws deploy create-deployment --application-name seniors
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          ## 배포 그룹 이름
+          --deployment-group-name seniors  
+          --s3-location bucket=backend-app-bucket,bundleType=zip,key=spring-build.zip
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       ## docker compose up
       - name: executing remote ssh commands using password
