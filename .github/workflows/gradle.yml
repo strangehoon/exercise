@@ -83,14 +83,13 @@ jobs:
           docker save strangehoon2 | gzip > strangehoon2.tar.gz
           aws s3 cp strangehoon2.tar.gz s3://backend-app-bucket/strangehoon2.tar.gz
 
+
       # CodeDelploy에 배포를 요청합니다.
       - name: Code Deploy 배포 요청
-        run: aws deploy create-deployment --application-name seniors
-          --deployment-config-name CodeDeployDefault.OneAtATime
-          ## 배포 그룹 이름
-          --deployment-group-name seniors  
+        run: aws deploy create-deployment --application-name seniors \
+          --deployment-config-name CodeDeployDefault.OneAtATime \
+          --deployment-group-name seniors \
           --s3-location bucket=backend-app-bucket,bundleType=zip,key=spring-build.zip
-
 
 
 
