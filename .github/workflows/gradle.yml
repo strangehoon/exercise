@@ -56,7 +56,7 @@ jobs:
         run: |
           aws s3 cp \
             --region ap-northeast-2 \
-            ./seniors-build.zip s3://tcat-spring    
+            ./seniors-build.zip s3://backend-app-bucket    
 
 #      - name: Build Docker image
 #        run: |
