@@ -49,6 +49,9 @@ jobs:
       - name: Make zip file
         run: |
           mkdir deploy
+          cp ./appspec.yml ./deploy/
+          cp ./Dockerfile ./deploy/
+          cp ./deploy.sh ./deploy/
           cp ./build/libs/*.jar ./deploy/
           zip -r -qq -j ./seniors-build.zip ./deploy
 
@@ -82,7 +85,7 @@ jobs:
           aws deploy create-deployment --application-name seniors \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name seniors \
-            --s3-location bucket=backend-app-bucket,bundleType=tar,key=seniors.tar.gz
+            --s3-location bucket=backend-app-bucket,bundleType=zip,key=seniors-build.zip
 #
 #      - name: Slack 알람 발송
 #        uses: rtCamp/action-slack-notify@v2
