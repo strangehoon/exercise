@@ -77,12 +77,12 @@ jobs:
         if: always()
 
 
-#      - name: Code Deploy 배포 요청
-#        run: |
-#          aws deploy create-deployment --application-name seniors \
-#            --deployment-config-name CodeDeployDefault.OneAtATime \
-#            --deployment-group-name seniors \
-#            --s3-location bucket=backend-app-bucket,bundleType=tar,key=seniors.tar.gz
+      - name: Code Deploy 배포 요청
+        run: |
+          aws deploy create-deployment --application-name seniors \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name seniors \
+            --s3-location bucket=backend-app-bucket,bundleType=tar,key=seniors.tar.gz
 #
 #      - name: Slack 알람 발송
 #        uses: rtCamp/action-slack-notify@v2
