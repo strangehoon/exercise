@@ -46,11 +46,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Build Docker image
+      - name: Make zip file
         run: |
-          docker build -t ${{ secrets.DOCKER_REPO }}/seniors .
-          docker save ${{ secrets.DOCKER_REPO }}/seniors | gzip > seniors.tar.gz
-          aws s3 cp seniors.tar.gz s3://backend-app-bucket/seniors.tar.gz
+          mkdir deploy
+          cp ./build/libs/*.jar ./deploy/
+          zip -r -qq -j ./seniors-build.zip ./deploy
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp \
+            --region ap-northeast-2 \
+            ./seniors-build.zip s3://tcat-spring    
+
+#      - name: Build Docker image
+#        run: |
+#          docker build -t ${{ secrets.DOCKER_REPO }}/seniors .
+#          docker save ${{ secrets.DOCKER_REPO }}/seniors | gzip > seniors.tar.gz
+#          aws s3 cp seniors.tar.gz s3://backend-app-bucket/seniors.tar.gz
 
       - name: Slack 알람 발송
         uses: rtCamp/action-slack-notify@v2
@@ -65,21 +77,21 @@ jobs:
         if: always()
 
 
-      - name: Code Deploy 배포 요청
-        run: |
-          aws deploy create-deployment --application-name seniors \
-            --deployment-config-name CodeDeployDefault.OneAtATime \
-            --deployment-group-name seniors \
-            --s3-location bucket=backend-app-bucket,bundleType=tar,key=seniors.tar.gz
-
-      - name: Slack 알람 발송
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_CHANNEL: general
-          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: 배포 결과 => ${{ job.status }}
-          SLACK_TITLE: 배포 결과 알람
-          SLACK_USERNAME: Notification-Bot
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-        if: always()
+#      - name: Code Deploy 배포 요청
+#        run: |
+#          aws deploy create-deployment --application-name seniors \
+#            --deployment-config-name CodeDeployDefault.OneAtATime \
+#            --deployment-group-name seniors \
+#            --s3-location bucket=backend-app-bucket,bundleType=tar,key=seniors.tar.gz
+#
+#      - name: Slack 알람 발송
+#        uses: rtCamp/action-slack-notify@v2
+#        env:
+#          SLACK_CHANNEL: general
+#          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+#          SLACK_ICON: https://github.com/rtCamp.png?size=48
+#          SLACK_MESSAGE: 배포 결과 => ${{ job.status }}
+#          SLACK_TITLE: 배포 결과 알람
+#          SLACK_USERNAME: Notification-Bot
+#          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+#        if: always()
