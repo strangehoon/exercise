@@ -4,7 +4,7 @@
 cd /home/ubuntu
 
 # 환경변수 DOCKER_APP_NAME을 spring으로 설정
-DOCKER_APP_NAME=seniors
+DOCKER_APP_NAME=exercise
 
 
 # 실행중인 blue가 있는지 확인
