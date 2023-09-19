@@ -70,7 +70,7 @@ jobs:
         env:
           ECR_REGISTRY: "252196958870.dkr.ecr.ap-northeast-2.amazonaws.com/seniors"
           ECR_REPOSITORY: "seniors/seniors-backend/dev"
-          IMAGE_TAG: "exercise"
+          IMAGE_TAG: "seniors-0.0.1-SNAPSHOT.jar"
         run: |
           docker build -t seniors .
           docker tag seniors:latest 252196958870.dkr.ecr.ap-northeast-2.amazonaws.com/seniors:latest
