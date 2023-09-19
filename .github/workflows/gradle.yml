@@ -28,6 +28,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .  # Dockerfile이 있는 디렉토리
+          file: ./path/to/Dockerfile  # Dockerfile의 경로
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/seniors:$GITHUB_SHA  # 이미지 태그
+
+
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
