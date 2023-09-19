@@ -18,6 +18,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
+      # JDK를 17 버전으로 세팅
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
       # Gradle 캐싱-> 빌드 속도 UP
       - name: Gradle caching
