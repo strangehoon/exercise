@@ -39,6 +39,8 @@ jobs:
       - name: Docker image Build
         id: build-image
         run: docker build -t seniors .
+        working-directory: /build/libs/*.jar
+
       - name: Docker image Push
         id: push-image
         run: |
