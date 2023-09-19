@@ -65,10 +65,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-#      - name: Copy JAR to Docker Context
-#        run: |
-#          cp build/libs/exercise-0.0.1-SNAPSHOT.jar exercise-0.0.1-SNAPSHOT.jar
-#        working-directory: ./src/main/resources
+      - name: Restore Gradle cache directory
+        uses: actions/cache@v3
+        with:
+          path: ./
+          key: ${{ runner.os }}-physicaltheraphy-build-cache-${{ steps.short-sha.outputs.sha }}
 
       - name: Docker image Build
         id: build-image
