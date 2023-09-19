@@ -39,7 +39,8 @@ jobs:
       - name: Docker image Build
         id: build-image
         run: docker build -t seniors .
-        working-directory: /build/libs/
+        working-directory: .  # 루트 디렉토리에서 Docker 빌드를 실행하도록 수정합니다.
+      
 
       - name: Docker image Push
         id: push-image
