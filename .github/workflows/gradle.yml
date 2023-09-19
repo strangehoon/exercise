@@ -72,9 +72,9 @@ jobs:
           ECR_REPOSITORY: "seniors/seniors-backend/dev"
           IMAGE_TAG: "exercise"
         run: |
-          docker buildx build --platform=linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker build -t seniors .
+          docker tag seniors:latest 252196958870.dkr.ecr.ap-northeast-2.amazonaws.com/seniors:latest
+          docker push 252196958870.dkr.ecr.ap-northeast-2.amazonaws.com/seniors:latest
 
 #      # 배포 결과 Slack 알람 전송
 #      - name: Slack 알람 발송
