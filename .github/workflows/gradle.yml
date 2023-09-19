@@ -72,15 +72,14 @@ jobs:
           ECR_REPOSITORY: "seniors/seniors-backend/dev"
           IMAGE_TAG: "seniors-0.0.1-SNAPSHOT.jar"
       - name: Docker image Build
-        id: build-image
         run: |
           docker build \
             -f Dockerfile \
-            -t $/$:$ .
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+
       - name: Docker image Push
-        id: push-image
         run: |
-          docker push $/$:$        
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG        
 
 #      # 배포 결과 Slack 알람 전송
 #      - name: Slack 알람 발송
