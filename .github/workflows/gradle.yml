@@ -5,87 +5,42 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Seniors CICD(deploy)
-
+name: "Build and push to ECR"
 on:
   push:
-    branches: [ "main"]
-
-permissions:
-  contents: read
-
+    branches:
+      - master
+  pull_request:
 jobs:
-  build:
+  BuildAndPushImageToECR:
+    name: "Build and Push to ECR"
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      # JDK를 17 버전으로 세팅
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      # Gradle 캐싱-> 빌드 속도 UP
-      - name: Gradle caching
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-    
-
-      # application.yml 파일 생성
-      - name: make application.yaml
-        run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.APPLICATION }}" > ./application.yml
-        shell: bash
-
-      # Gradle로 빌드 실행
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-        with:
-          arguments: build
-
-      # AWS에 연결
-      - name: Connect to AWS
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }} // region you want to push the image to
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Restore Gradle cache directory
-        uses: actions/cache@v3
-        with:
-          path: ./
-          key: ${{ runner.os }}-physicaltheraphy-build-cache-${{ steps.short-sha.outputs.sha }}
-
-      - name: Docker image Build
+      - name: Build, tag, and push image to Amazon ECR 🏷
         id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: "seniors"
+          IMAGE_TAG: v1
         run: |
-          ECR_REGISTRY="${{ steps.login-ecr.outputs.registry }}"
-          ECR_REPOSITORY="seniors"
-          IMAGE_TAG="${{ github.sha }}"
-          docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
-        working-directory: ./  # 프로젝트 루트 디렉토리로 변경
-
-
-      - name: Docker image Push
-        id: push-image
-        run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/seniors:$IMAGE_TAG
-        working-directory: ./src/main/resources
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
 
 
