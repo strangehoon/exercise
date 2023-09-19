@@ -38,10 +38,7 @@ jobs:
           echo ::set-output name=IMAGE_TAG::$(cat VERSION)
       - name: Docker image Build
         id: build-image
-        run: |
-          docker build \
-            -f Dockerfile \
-            -t $/$:$ .
+        run: docker build -t seniors .
       - name: Docker image Push
         id: push-image
         run: |
