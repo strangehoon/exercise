@@ -77,7 +77,8 @@ jobs:
           ECR_REPOSITORY="seniors"
           IMAGE_TAG="${{ github.sha }}"
           docker build -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
-        working-directory: ./src/main/resources
+        working-directory: ./  # 프로젝트 루트 디렉토리로 변경
+
 
       - name: Docker image Push
         id: push-image
