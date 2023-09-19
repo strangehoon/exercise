@@ -68,9 +68,12 @@ jobs:
       - name: Docker image Build
         id: build-image
         run: |
+          ECR_REGISTRY="252196958870.dkr.ecr.ap-northeast-2.amazonaws.com/seniors"
+          ECR_REPOSITORY="seniors"
+          IMAGE_TAG="seniors"
           docker build \
             -f Dockerfile \
-            -t ${{ steps.set-var.outputs.ECR_REGISTRY }}/${{ steps.set-var.outputs.ECR_REPOSITORY }}:${{ steps.set-var.outputs.IMAGE_TAG }} .
+            -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" .
 
       - name: Docker image Push
         id: push-image
