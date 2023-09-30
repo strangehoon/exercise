@@ -51,13 +51,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew bootJar
 
-      # image 빌드 및 도커허브에 push
-      - name: web docker build and push
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
-          docker build -t ${{ secrets.DOCKER_REPO }}/ex:${{ steps.meta.outputs.tags }} .
-          docker push ${{ secrets.DOCKER_REPO }}/ex:${{ steps.meta.outputs.labels }}
-
       # image로부터 Metadata 추출
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -66,6 +59,13 @@ jobs:
           images: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
           tags: |
             type=sha
+
+      # image 빌드 및 도커허브에 push
+      - name: web docker build and push
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          docker build -t ${{ secrets.DOCKER_REPO }}/ex:${{ steps.meta.outputs.tags }} .
+          docker push ${{ secrets.DOCKER_REPO }}/ex:${{ steps.meta.outputs.labels }}
 
       # manifest file 존재하는 Repository clone and checkout
       - name: Clone and Checkout to config Repository
