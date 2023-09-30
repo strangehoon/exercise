@@ -56,5 +56,5 @@ jobs:
       - name: web docker build and push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
-          docker build -t ${{ secrets.DOCKER_REPO }}/ex .
+          docker build -t ${{ secrets.DOCKER_REPO }}/ex:${{ github.sha }} .
           docker push ${{ secrets.DOCKER_REPO }}/ex
