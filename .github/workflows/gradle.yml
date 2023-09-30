@@ -47,17 +47,17 @@ jobs:
           echo "${{ secrets.APPLICATION }}" >> ./application-dev.yaml
         shell: bash
 
-      # Gradle로 빌드 실행
-      - name: Build with Gradle
-        run: ./gradlew bootJar
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-          tags: |
-            type=sha        
+#      # Gradle로 빌드 실행
+#      - name: Build with Gradle
+#        run: ./gradlew bootJar
+#
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        uses: docker/metadata-action@v4
+#        with:
+#          images: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+#          tags: |
+#            type=sha
 
       # image 빌드 및 도커허브에 push
       - name: web docker build and push
