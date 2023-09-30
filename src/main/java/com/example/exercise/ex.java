@@ -13,7 +13,6 @@ public class ex {
 
     @PostMapping("/ex1")
     public void ex(@RequestParam String content){
-        log.info("11!1");
         User user = new User();
         user.setContent(content);
         userService.saveUser(user);
@@ -22,7 +21,18 @@ public class ex {
 
     @RequestMapping("/ex2")
     public String ex2(){
-        return "hellos!!!!!gegeg!!!!!!!!!!!vreverververver";
+        return "hellos";
     }
 
+    @GetMapping("/ex3")
+    public void slackErrorSampleController() {
+        log.info("this log is info");
+        log.warn("this log is warn");
+        log.error("this log is error");
+    }
+
+    @GetMapping("/ex4/{id}")
+    public String ex4(@PathVariable Long id) {
+        return userService.findUser(id);
+    }
 }
