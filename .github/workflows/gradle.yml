@@ -58,3 +58,28 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
           docker build -t ${{ secrets.DOCKER_REPO }}/ex:${{ github.sha }} .
           docker push ${{ secrets.DOCKER_REPO }}/ex:${{ github.sha }}
+
+      # manifest file 존재하는 Repository clone and checkout
+      - name: Clone and Checkout to config Repository
+        uses: actions/checkout@v3
+        with:
+          repository: strangehoon/ex-config
+          token: ${{ secrets.HELMREPO }}
+
+      #yq 사용해 yaml file edit
+      - name: Change config repo values.yaml
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq -i '.image.tag = "${{ steps.meta.outputs.version }}"' ex/values.yaml
+
+      - name: Pushes to config repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.HELMREPO }}
+        with:
+          source-directory: "."
+          destination-github-username: "strangehoon"
+          destination-repository-name: "ex-config"
+          user-email: strangehoon2@gmail.com
+          target-branch: main
+          commit-message: "Update Image version to ${{ steps.meta.outputs.version  }}"
