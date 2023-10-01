@@ -65,7 +65,7 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_ACCESS_TOKEN }}
           docker build -t ${{ secrets.DOCKER_REPO }}/ex:${{ steps.meta.outputs.tags }} .
-          docker push ${{ secrets.DOCKER_REPO }}/ex:${{ steps.meta.outputs.labels }}
+          docker push ${{ secrets.DOCKER_REPO }}/ex:${{ steps.meta.outputs.tags }}
 
       # manifest file 존재하는 Repository clone and checkout
       - name: Clone and Checkout to config Repository
