@@ -21,7 +21,7 @@ public class ex {
 
     @RequestMapping("/ex2")
     public String ex2(){
-        return "hellos hello";
+        return "hellos hello!!!!!!!!!!!!!!!!!!!!!!!!";
     }
 
 //    @GetMapping("/ex3")
